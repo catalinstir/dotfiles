@@ -1,0 +1,66 @@
+# Python
+alias p3="python3"
+alias pd3="pydoc3"
+alias devpy="source ~/.venv/dev/bin/activate"
+
+# Docker/K8s
+alias d="docker"
+alias k="microk8s kubectl"
+alias m="microk8s"
+alias docker-compose="docker compose"
+alias dcu="docker compose up -d"
+alias dcd="docker compose down -v"
+alias dspv="docker system prune -f --volumes"
+alias kubectl="microk8s kubectl"
+alias k="microk8s kubectl"
+
+# Programs
+alias clip="xclip -selection clipboard"
+alias helgrind="valgrind --tool=helgrind"
+alias gogh='bash -c "$(wget -qO- https://git.io/vQgMr)"'
+alias dn="dotnet"
+alias vide="neovide"
+alias v="/usr/local/bin/nvim"
+alias t="/usr/bin/tmux"
+
+
+# Eza
+## Basic replacements
+alias ls="eza --icons --group-directories-first"
+alias l="eza -la --git --header --icons auto"
+
+## Tree views
+alias lt="eza -l --git -T --hyperlink --icons --header"
+
+## Git integration
+alias lg="eza --icons --group-directories-first -lh --git"
+alias lga="eza --icons --group-directories-first -lha --git"
+
+## Sorting options
+alias lS="eza --icons --group-directories-first -lh --sort=size"
+alias lT="eza --icons --group-directories-first -lh --sort=modified"
+alias lX="eza --icons --group-directories-first -lh --sort=extension"
+
+## Special views
+alias lD="eza --icons -lhD"  # Only directories
+alias lf="eza --icons -lhf"  # Only files
+alias lh="eza --icons -lhd .*"  # Only hidden files
+
+## Detailed info
+alias lli="eza --icons --group-directories-first -lh --git --header --inode --links"
+
+compdef l=eza
+
+# QOL
+alias f="fzf --preview='cat {}'"
+alias sl="ls"
+alias mna="man"
+alias nivm="/usr/local/bin/nvim"
+alias x="exit"
+alias make="make -j$(nproc)"
+alias help="run-help"
+alias r="fc -s"
+alias ag="alias | grep"
+alias lsb="lsb_release -a"
+alias o="open"
+alias ff="fastfetch"

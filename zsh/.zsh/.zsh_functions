@@ -1,0 +1,104 @@
+hotspot-start() {
+  nmcli device wifi hotspot ifname wlp0s20f3 ssid debian12 password "debian13"
+}
+hotspot-stop() {
+  nmcli connection down Hotspot
+}
+hotspot-list() {
+  nmcli connection show
+}
+mkcd() {
+    mkdir -p "$1" && cd "$1"
+}
+
+chmac() {
+    MACFILE='~/pub/MAC/mta_mac.txt'
+    IFACE="wlp0s20f3"
+    NEWMAC=$(cat "$MACFILE")
+
+    NEWMAC="34:6F:24:EA:56:1B"
+
+    sudo ip link set dev "$IFACE" down
+    sudo ip link set dev "$IFACE" address "$NEWMAC"
+    sudo ip link set dev "$IFACE" up
+}
+
+Cmake() {
+    cmake -S . -B build && cmake --build build
+}
+
+clean_old_logs() {
+    local days=$1
+    find . -type f -name "*.log" -mtime +$days -exec rm -v {} \;
+    echo "Removed logs older than $days days."
+}
+
+
+gdrive() {
+    local MOUNT_POINT="$HOME/gdrive"
+
+    # Parse args
+    case "$1" in
+        -m|--mount)
+            echo "Mounting Google Drive to $MOUNT_POINT..."
+            mkdir -p "$MOUNT_POINT"
+            rclone mount "gdrive:" "$MOUNT_POINT" --vfs-cache-mode full --daemon
+            ;;
+        -u|--umount|--unmount)
+            echo "Unmounting Google Drive from $MOUNT_POINT..."
+            if mountpoint -q "$MOUNT_POINT"; then
+                fusermount -u "$MOUNT_POINT" 2>/dev/null || umount "$MOUNT_POINT"
+            else
+                echo "Nothing is mounted at $MOUNT_POINT"
+            fi
+            ;;
+        --help|-h|"")
+            echo "Usage: gdrive [OPTION]
+
+Options:
+  -m, --mount        Mount Google Drive to ~/gdrive
+  -u, --unmount      Unmount Google Drive
+  --help             Show this help message"
+            ;;
+        *)
+            echo "Unknown option: $1"
+            echo "Try --help for usage."
+            return 1
+            ;;
+    esac
+}
+
+neovide() {
+    local DETACH=0
+
+    # Parse flags
+    for arg in "$@"; do
+        case "$arg" in
+            -d)
+                DETACH=1
+                shift
+                ;;
+            --help)
+                echo "Usage: neovide [OPTIONS] [ARGS...]
+
+Launch Neovide from the terminal.
+
+Options:
+  -d          Detach and close terminal after launch
+  --help      Show this help message and exit
+
+Any additional ARGS are passed to Neovide itself."
+                return 0
+                ;;
+        esac
+    done
+
+    # Launch Neovide
+    nohup /usr/local/bin/neovide "$@" >/dev/null 2>&1 &
+    disown
+
+    # Close terminal if -d flag was given
+    if [ $DETACH -eq 1 ]; then
+        exit
+    fi
+}
