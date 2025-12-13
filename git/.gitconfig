@@ -1,0 +1,130 @@
+[user]
+	name = Catalin Stir
+	email = catalin.stir@gmail.com
+
+[core]
+	editor = nvim
+	pager = less -FRX
+	autocrlf = input
+	whitespace = trailing-space,space-before-tab
+
+[init]
+	defaultBranch = main
+
+[color]
+	ui = auto
+	branch = auto
+	diff = auto
+	status = auto
+
+[color "branch"]
+	current = yellow bold
+	local = green
+	remote = cyan
+
+[color "diff"]
+	meta = yellow bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+
+[color "status"]
+	added = green bold
+	changed = yellow bold
+	untracked = red bold
+
+[alias]
+	# Basic shortcuts
+	st = status -sb
+	ci = commit
+	co = checkout
+	br = branch
+	df = diff
+	dfs = diff --staged
+	
+	# Logs
+	l = log --oneline --graph --decorate
+	ll = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	la = log --all --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	
+	# Amend
+	amend = commit --amend --no-edit
+	amendm = commit --amend
+	
+	# Undo
+	undo = reset HEAD~1 --mixed
+	unstage = reset HEAD --
+	
+	# Show last commit
+	last = log -1 HEAD --stat
+	
+	# List aliases
+	aliases = config --get-regexp alias
+	
+	# Clean merged branches
+	cleanup = "!git branch --merged | grep -v '\\*\\|main\\|master\\|develop' | xargs -n 1 git branch -d"
+
+[push]
+	default = simple
+	autoSetupRemote = true
+
+[pull]
+	rebase = false
+
+[fetch]
+	prune = true
+
+[merge]
+	tool = nvimdiff
+	conflictstyle = diff3
+
+[mergetool]
+	prompt = false
+	keepBackup = false
+
+[mergetool "nvimdiff"]
+	cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+
+[diff]
+	tool = nvimdiff
+	colorMoved = default
+
+[difftool]
+	prompt = false
+
+[difftool "nvimdiff"]
+	cmd = nvim -d $LOCAL $REMOTE
+
+[rerere]
+	enabled = true
+
+[help]
+	autocorrect = 1
+
+[status]
+	showUntrackedFiles = all
+
+[transfer]
+	fsckobjects = true
+
+[credential]
+	helper = cache --timeout=3600
+
+# Performance
+[feature]
+	manyFiles = true
+
+[index]
+	threads = true
+
+# URL shortcuts
+[url "git@github.com:"]
+	insteadOf = gh:
+	pushInsteadOf = github:
+	pushInsteadOf = git://github.com/
+
+[url "git@gitlab.com:"]
+	insteadOf = gl:
+	pushInsteadOf = gitlab:
+	pushInsteadOf = git://gitlab.com/

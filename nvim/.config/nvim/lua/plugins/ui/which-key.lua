@@ -20,17 +20,17 @@ return {
     require("which-key").setup(opts)
     require("which-key").add {
       {
-        { "<leader>f", group = "Find", icon = "" },
-        { "<leader>g", group = "Git", icon = "󰊢" },
-        { "<leader>h", group = "Harpoon", icon = "" },
-        { "<leader>l", group = "LSP", icon = "" },
-        { "<leader>n", group = "Neovim", icon = "" },
-        { "<leader>o", group = "Options", icon = "" },
-        { "<leader>p", group = "Plugins", icon = "" },
-        { "<leader>t", group = "Terminal", icon = "" },
-        { "<leader>x", group = "Trouble", icon = "" },
-        { "<leader>e", group = "NvimTree", icon = "" },
-        { "<leader>m", group = "Mason", icon = "" },
+        { "<leader>f", group = "Find", icon = "  " },
+        { "<leader>g", group = "Git", icon = " 󰊢 " },
+        { "<leader>h", group = "Harpoon", icon = "  " },
+        { "<leader>l", group = "LSP", icon = "  " },
+        { "<leader>n", group = "Neovim", icon = "  " },
+        { "<leader>o", group = "Options", icon = "  " },
+        { "<leader>p", group = "Plugins", icon = "  " },
+        { "<leader>t", group = "Terminal", icon = "  " },
+        { "<leader>x", group = "Trouble", icon = "  " },
+        { "<leader>e", group = "NvimTree", icon = "  " },
+        { "<leader>m", group = "Mason", icon = "  " },
       },
     }
   end,

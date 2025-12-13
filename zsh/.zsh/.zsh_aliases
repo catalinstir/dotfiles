@@ -5,14 +5,12 @@ alias devpy="source ~/.venv/dev/bin/activate"
 
 # Docker/K8s
 alias d="docker"
-alias k="microk8s kubectl"
 alias m="microk8s"
+alias k="kubectl"
 alias docker-compose="docker compose"
 alias dcu="docker compose up -d"
 alias dcd="docker compose down -v"
 alias dspv="docker system prune -f --volumes"
-alias kubectl="microk8s kubectl"
-alias k="microk8s kubectl"
 
 # Programs
 alias clip="xclip -selection clipboard"

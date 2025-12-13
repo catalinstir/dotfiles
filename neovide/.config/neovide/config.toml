@@ -12,8 +12,8 @@ vsync = true
 wsl = false
 
 [font]
-normal = ["JetBrainsMono Nerd Font"]
-size = 8.0
+normal = ["Iosevka NF Bold 15"]
+size = 15
 
 [box-drawing]
 mode = "font-glyph"
