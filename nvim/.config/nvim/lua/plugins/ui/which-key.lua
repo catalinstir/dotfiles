@@ -31,6 +31,9 @@ return {
         { "<leader>x", group = "Trouble", icon = "  " },
         { "<leader>e", group = "NvimTree", icon = "  " },
         { "<leader>m", group = "Mason", icon = "  " },
+        { "<leader>T", group = "Typr", icon = "  " },
+        { "<leader>y", group = "Yank entire file", icon = "  " },
+        { "<leader>b", group = "Buffers", icon = "  " },
       },
     }
   end,

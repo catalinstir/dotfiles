@@ -34,16 +34,18 @@ vim.keymap.set("n", "<leader>pu", "<cmd>Lazy update<cr>", { desc = "Lazy | Updat
 -- Options --
 -- Toggle Format on Save
 vim.keymap.set("n", "<leader>of", function()
-  vim.g.disable_autoformat = not vim.g.disable_autoformat
+  local conform = require "conform"
   if vim.g.disable_autoformat then
-    vim.notify("Disabled", vim.log.levels.INFO, { title = "Format on Save" })
-  else
+    vim.g.disable_autoformat = false
     vim.notify("Enabled", vim.log.levels.INFO, { title = "Format on Save" })
+  else
+    vim.g.disable_autoformat = true
+    vim.notify("Disabled", vim.log.levels.INFO, { title = "Format on Save" })
   end
 end, { desc = "Options | Toggle Format on Save", silent = true })
 
 -- Live Grep in Neovim Config Directory
-vim.keymap.set("n", "<leader>ov", function()
+vim.keymap.set("n", "<leader>nv", function()
   require("telescope.builtin").live_grep {
     cwd = vim.fn.stdpath "config",
     prompt_title = "Search Neovim Config",
@@ -80,50 +82,8 @@ vim.keymap.set("n", "<leader>od", function()
   end
 end, { desc = "Options | Toggle Diagnostics", silent = true })
 
--- Toggle Spell Check
-vim.keymap.set("n", "<leader>os", function()
-  vim.o.spell = not vim.o.spell
-  if vim.o.spell then
-    vim.notify("Enabled", vim.log.levels.INFO, { title = "Spell Check" })
-  else
-    vim.notify("Disabled", vim.log.levels.INFO, { title = "Spell Check" })
-  end
-end, { desc = "Options | Toggle Spell Check", silent = true })
-
--- Toggle Wrap
-vim.keymap.set("n", "<leader>ow", function()
-  vim.o.wrap = not vim.o.wrap
-  if vim.o.wrap then
-    vim.notify("Enabled", vim.log.levels.INFO, { title = "Line Wrap" })
-  else
-    vim.notify("Disabled", vim.log.levels.INFO, { title = "Line Wrap" })
-  end
-end, { desc = "Options | Toggle Line Wrap", silent = true })
-
--- Toggle Cursor Line
-vim.keymap.set("n", "<leader>oc", function()
-  vim.o.cursorline = not vim.o.cursorline
-  if vim.o.cursorline then
-    vim.notify("Enabled", vim.log.levels.INFO, { title = "Cursor Line" })
-  else
-    vim.notify("Disabled", vim.log.levels.INFO, { title = "Cursor Line" })
-  end
-end, { desc = "Options | Toggle Cursor Line", silent = true })
-
--- Toggle Virtual Text (inline diagnostics)
-vim.keymap.set("n", "<leader>ot", function()
-  local current = vim.diagnostic.config().virtual_text
-  if current then
-    vim.diagnostic.config { virtual_text = false }
-    vim.notify("Disabled", vim.log.levels.INFO, { title = "Virtual Text" })
-  else
-    vim.diagnostic.config { virtual_text = true }
-    vim.notify("Enabled", vim.log.levels.INFO, { title = "Virtual Text" })
-  end
-end, { desc = "Options | Toggle Virtual Text", silent = true })
-
 -- Toggle Inlay Hints (LSP type hints)
-vim.keymap.set("n", "<leader>oh", function()
+vim.keymap.set("n", "<leader>lh", function()
   vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
   if vim.lsp.inlay_hint.is_enabled() then
     vim.notify("Enabled", vim.log.levels.INFO, { title = "Inlay Hints" })
@@ -132,10 +92,67 @@ vim.keymap.set("n", "<leader>oh", function()
   end
 end, { desc = "Options | Toggle Inlay Hints", silent = true })
 
+-- SudaWrite
+vim.keymap.set("n", "<leader>ns", "<cmd>SudaWrite<cr>", { desc = "Neovim | Write with sudo", silent = true })
+
+-- Toggle Supermaven
+vim.keymap.set("n", "<leader>na", function()
+  local api = require "supermaven-nvim.api"
+  if api.is_running() then
+    api.stop()
+    vim.notify("Disabled", vim.log.levels.INFO, { title = "Supermaven" })
+  else
+    api.start()
+    vim.notify("Enabled", vim.log.levels.INFO, { title = "Supermaven" })
+  end
+end, { desc = "Options | Toggle Supermaven", silent = true })
+
 -- Open Neovim Config in Telescope
-vim.keymap.set("n", "<leader>oV", function()
+vim.keymap.set("n", "<leader>nV", function()
   require("telescope.builtin").find_files {
     cwd = vim.fn.stdpath "config",
     prompt_title = "Neovim Config Files",
   }
 end, { desc = "Options | Find Config Files", silent = true })
+
+-- Quick buffer navigation
+vim.keymap.set("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Previous buffer" })
+vim.keymap.set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
+
+-- Close buffer without closing window
+vim.keymap.set("n", "<leader>bd", "<cmd>bd<cr>", { desc = "Delete buffer" })
+vim.keymap.set("n", "<leader>bD", "<cmd>bd!<cr>", { desc = "Delete buffer (force)" })
+
+-- Close all buffers except current
+vim.keymap.set("n", "<leader>bo", "<cmd>%bd|e#|bd#<cr>", { desc = "Close all other buffers" })
+
+-- Stay in indent mode
+vim.keymap.set("v", "<", "<gv", { desc = "Indent left" })
+vim.keymap.set("v", ">", ">gv", { desc = "Indent right" })
+
+-- Move lines in normal mode
+vim.keymap.set("n", "<A-j>", "<cmd>m .+1<cr>==", { desc = "Move line down" })
+vim.keymap.set("n", "<A-k>", "<cmd>m .-2<cr>==", { desc = "Move line up" })
+
+-- Move lines in visual mode
+vim.keymap.set("v", "<A-j>", ":m '>+1<cr>gv=gv", { desc = "Move selection down" })
+vim.keymap.set("v", "<A-k>", ":m '<-2<cr>gv=gv", { desc = "Move selection up" })
+
+-- Don't yank when pasting over selection
+vim.keymap.set("v", "p", '"_dP', { desc = "Paste without yanking" })
+
+-- Save with Ctrl+S (also works in insert mode)
+vim.keymap.set("n", "<C-s>", "<cmd>w<cr>", { desc = "Save file" })
+vim.keymap.set("i", "<C-s>", "<Esc><cmd>w<cr>", { desc = "Save file" })
+
+-- Move by visual line, not actual line
+vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+vim.keymap.set("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
+
+-- Keep cursor centered when scrolling
+vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Scroll down and center" })
+vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Scroll up and center" })
+
+-- Keep cursor centered when searching
+vim.keymap.set("n", "n", "nzzzv", { desc = "Next search result (centered)" })
+vim.keymap.set("n", "N", "Nzzzv", { desc = "Previous search result (centered)" })

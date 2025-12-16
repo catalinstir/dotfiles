@@ -99,6 +99,11 @@ return {
         -- vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
         vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
         vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
+
+        local client = vim.lsp.get_client_by_id(args.data.client_id)
+        if client and client.server_capabilities.inlayHintProvider then
+          vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
+        end
       end,
     })
   end,

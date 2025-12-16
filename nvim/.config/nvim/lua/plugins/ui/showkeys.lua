@@ -1,12 +1,11 @@
 return {
   "nvzone/showkeys",
-  init = function()
-    vim.keymap.set(
-      "n",
-      "<leader>ok",
-      "<cmd>ShowkeysToggle<cr>",
-      { desc = "Screenkey | Toggle Screenkey", silent = true }
-    )
+  event = "VeryLazy",
+  keys = {
+    { "<leader>ok", "<cmd>ShowkeysToggle<cr>", desc = "Options | Toggle Screenkey" },
+  },
+  config = function()
+    require("showkeys").setup()
+    vim.cmd "Showkeys"
   end,
-  cmd = "ShowkeysToggle",
 }
