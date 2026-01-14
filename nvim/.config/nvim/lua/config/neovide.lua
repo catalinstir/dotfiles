@@ -25,4 +25,21 @@ if vim.g.neovide then
   vim.g.neovide_padding_bottom = 0
   vim.g.neovide_padding_right = 0
   vim.g.neovide_padding_left = 0
+
+  -- Zoom keymaps
+  vim.keymap.set("n", "<C-=>", function()
+    vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * 1.1
+  end, { desc = "Neovide | Zoom in" })
+
+  vim.keymap.set("n", "<C-+>", function()
+    vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * 1.1
+  end, { desc = "Neovide | Zoom in" })
+
+  vim.keymap.set("n", "<C-->", function()
+    vim.g.neovide_scale_factor = vim.g.neovide_scale_factor / 1.1
+  end, { desc = "Neovide | Zoom out" })
+
+  vim.keymap.set("n", "<C-0>", function()
+    vim.g.neovide_scale_factor = 1.0
+  end, { desc = "Neovide | Reset zoom" })
 end

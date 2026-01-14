@@ -3,4 +3,4 @@ require "config/keymaps"
 require "config/autocmds"
 require "config/neovide"
 
-vim.cmd.colorscheme "tokyonight-moon"
+vim.cmd.colorscheme "catppuccin-mocha"

@@ -9,6 +9,7 @@
   "edge": { "branch": "master", "commit": "4145071bb0ea909511fa9a444eec80367b11296f" },
   "everforest": { "branch": "master", "commit": "484dd560dccb2d2842685c441ad2b54a54ffef1b" },
   "friendly-snippets": { "branch": "main", "commit": "572f5660cf05f8cd8834e096d7b4c921ba18e175" },
+  "github-nvim-theme": { "branch": "main", "commit": "c106c9472154d6b2c74b74565616b877ae8ed31d" },
   "gruvbox": { "branch": "master", "commit": "180ad85971343df68be3422a5630fa84e45a9ab2" },
   "kanagawa.nvim": { "branch": "master", "commit": "aef7f5cec0a40dbe7f3304214850c472e2264b10" },
   "lazy.nvim": { "branch": "main", "commit": "85c7ff3711b730b4030d03144f6db6375044ae82" },

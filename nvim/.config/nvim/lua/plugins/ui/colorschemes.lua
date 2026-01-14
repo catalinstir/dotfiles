@@ -11,4 +11,5 @@ return {
   "sainnhe/everforest",
   "sainnhe/sonokai",
   "bluz71/vim-moonfly-colors",
+  "projekt0n/github-nvim-theme",
 }

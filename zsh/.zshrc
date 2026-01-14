@@ -8,7 +8,7 @@ export PATH="$PATH:/usr/local/mcuxpressoide-25.6.136/ide/plugins/com.nxp.mcuxpre
 export ZSH="$HOME/.oh-my-zsh"
 
 export JAVA_HOME=/opt/jdk-21
-export WIN="/mnt/36280B70280B2F05"
+export WIN="/media/catalin/win"
 export GH="https://github.com"
 
 ZSH_THEME="gallois"
