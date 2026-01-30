@@ -70,6 +70,7 @@ source $ZSH/oh-my-zsh.sh
 source ~/.zsh/.zsh_functions
 source ~/.zsh/.zsh_templates
 source ~/.zsh/.zsh_aliases
+source ~/.zsh/.zsh_embedded
 
 cat ~/.zsh/.reminders
 

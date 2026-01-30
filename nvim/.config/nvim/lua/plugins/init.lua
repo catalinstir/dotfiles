@@ -6,4 +6,5 @@ return {
   { import = "plugins.lsp" },
   { import = "plugins.completion" },
   { import = "plugins.ai" },
+  { import = "plugins.embedded" },
 }

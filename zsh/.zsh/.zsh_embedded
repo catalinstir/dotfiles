@@ -1,0 +1,353 @@
+# ============================================================================
+# EMBEDDED DEVELOPMENT FUNCTIONS
+# ============================================================================
+
+# Flash firmware to board
+eflash() {
+    local board="${1}"
+    local elf_file="${2}"
+    
+    if [[ -z "$board" ]]; then
+        echo "Usage: eflash [kl25z|k66] [elf_file]"
+        echo ""
+        echo "Examples:"
+        echo "  eflash kl25z                    # Flash default build output"
+        echo "  eflash k66 build/myapp.elf      # Flash specific file"
+        return 1
+    fi
+    
+    # Find ELF file if not specified
+    if [[ -z "$elf_file" ]]; then
+        elf_file=$(find build -name "*.elf" -type f | head -n 1)
+        if [[ -z "$elf_file" ]]; then
+            echo "Error: No .elf file found in build directory"
+            return 1
+        fi
+        echo "Using: $elf_file"
+    fi
+    
+    case "$board" in
+        kl25z|kl25)
+            echo "Flashing FRDM-KL25Z..."
+            openocd -f interface/cmsis-dap.cfg \
+                    -f target/klx.cfg \
+                    -c "adapter speed 1000" \
+                    -c "program $elf_file verify reset exit"
+            ;;
+        k66|fmuk66)
+            echo "Flashing RDDRONE-FMUK66..."
+            openocd -f interface/cmsis-dap.cfg \
+                    -f target/k60.cfg \
+                    -c "adapter speed 4000" \
+                    -c "program $elf_file verify reset exit"
+            ;;
+        *)
+            echo "Unknown board: $board"
+            echo "Supported: kl25z, k66"
+            return 1
+            ;;
+    esac
+}
+
+# Start debugging session
+edebug() {
+    local board="${1:-kl25z}"
+    local elf_file="${2}"
+    
+    # Find ELF file if not specified
+    if [[ -z "$elf_file" ]]; then
+        elf_file=$(find build -name "*.elf" -type f | head -n 1)
+        if [[ -z "$elf_file" ]]; then
+            echo "Error: No .elf file found in build directory"
+            return 1
+        fi
+    fi
+    
+    echo "Starting OpenOCD for $board..."
+    
+    case "$board" in
+        kl25z|kl25)
+            openocd -f interface/cmsis-dap.cfg \
+                    -f target/klx.cfg \
+                    -c "adapter speed 1000" &
+            ;;
+        k66|fmuk66)
+            openocd -f interface/cmsis-dap.cfg \
+                    -f target/k60.cfg \
+                    -c "adapter speed 4000" &
+            ;;
+        *)
+            echo "Unknown board: $board"
+            return 1
+            ;;
+    esac
+    
+    local OPENOCD_PID=$!
+    sleep 2
+    
+    echo "Starting GDB with $elf_file..."
+    gdb-multiarch \
+        -ex "target extended-remote localhost:3333" \
+        -ex "monitor reset halt" \
+        -ex "load" \
+        -ex "monitor reset init" \
+        "$elf_file"
+    
+    # Kill OpenOCD when GDB exits
+    kill $OPENOCD_PID 2>/dev/null
+}
+
+# Connect to serial port
+eserial() {
+    local port="${1:-/dev/ttyACM0}"
+    local baud="${2:-115200}"
+    
+    if [[ ! -e "$port" ]]; then
+        echo "Error: Port $port not found"
+        echo "Available ports:"
+        ls /dev/ttyACM* /dev/ttyUSB* 2>/dev/null || echo "  None found"
+        return 1
+    fi
+    
+    echo "Connecting to $port @ $baud baud..."
+    echo "Press Ctrl+A Ctrl+X to exit"
+    picocom -b "$baud" "$port"
+}
+
+# List available serial ports
+eports() {
+    echo "Available serial ports:"
+    for port in /dev/ttyACM* /dev/ttyUSB*; do
+        if [[ -e "$port" ]]; then
+            echo "  $port"
+            # Try to get device info
+            udevadm info -q property -n "$port" 2>/dev/null | grep -E "ID_(VENDOR|MODEL|SERIAL)=" | sed 's/^/    /'
+        fi
+    done
+}
+
+# Build embedded project
+ebuild() {
+    if [[ ! -f "CMakeLists.txt" ]]; then
+        echo "Error: No CMakeLists.txt found in current directory"
+        return 1
+    fi
+    
+    echo "Building project..."
+    
+    # Generate if build directory doesn't exist
+    if [[ ! -d "build" ]]; then
+        echo "Generating build files..."
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug \
+              -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+    fi
+    
+    # Build
+    cmake --build build -j$(nproc)
+    
+    # Show size info
+    if [[ $? -eq 0 ]]; then
+        echo ""
+        echo "Build successful! Memory usage:"
+        arm-none-eabi-size build/*.elf
+    fi
+}
+
+# Clean embedded project
+eclean() {
+    if [[ -d "build" ]]; then
+        echo "Cleaning build directory..."
+        rm -rf build
+        echo "Done!"
+    else
+        echo "No build directory to clean"
+    fi
+}
+
+# Create new embedded project
+enew() {
+    local board="${1}"
+    local project_name="${2}"
+    
+    if [[ -z "$board" || -z "$project_name" ]]; then
+        echo "Usage: enew [kl25z|k66] project_name"
+        echo ""
+        echo "Example: enew kl25z my-blinky"
+        return 1
+    fi
+    
+    echo "Creating $project_name for $board..."
+    
+    # Create directory structure
+    mkdir -p "$project_name"/{source,board,startup,CMSIS,drivers}
+    cd "$project_name" || return 1
+    
+    # Create main.c
+    cat > source/main.c << 'EOF'
+#include <stdint.h>
+
+int main(void) {
+    // TODO: Initialize peripherals
+    
+    while (1) {
+        // Main loop
+    }
+    
+    return 0;
+}
+EOF
+    
+    # Create CMakeLists.txt based on board
+    case "$board" in
+        kl25z|kl25)
+            cat > CMakeLists.txt << 'EOF'
+cmake_minimum_required(VERSION 3.15)
+project(app C ASM)
+
+set(CMAKE_C_STANDARD 11)
+set(MCU_DEVICE "MKL25Z128xxx4")
+
+# Compiler flags
+set(CMAKE_C_FLAGS "-mcpu=cortex-m0plus -mthumb -mfloat-abi=soft")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ffunction-sections -fdata-sections")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -O0 -g3")
+
+# Linker flags
+set(CMAKE_EXE_LINKER_FLAGS "-T${CMAKE_SOURCE_DIR}/startup/${MCU_DEVICE}_flash.ld")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--gc-sections")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -specs=nano.specs -specs=nosys.specs")
+
+include_directories(${CMAKE_SOURCE_DIR} board source CMSIS drivers startup)
+
+file(GLOB_RECURSE SOURCES "source/*.c" "board/*.c" "drivers/*.c" "startup/*.c" "startup/*.S")
+
+add_executable(${PROJECT_NAME}.elf ${SOURCES})
+
+add_custom_command(TARGET ${PROJECT_NAME}.elf POST_BUILD
+    COMMAND ${CMAKE_OBJCOPY} -O ihex ${PROJECT_NAME}.elf ${PROJECT_NAME}.hex
+    COMMAND ${CMAKE_OBJCOPY} -O binary ${PROJECT_NAME}.elf ${PROJECT_NAME}.bin
+    COMMAND ${CMAKE_SIZE} ${PROJECT_NAME}.elf
+)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+EOF
+            ;;
+        k66|fmuk66)
+            cat > CMakeLists.txt << 'EOF'
+cmake_minimum_required(VERSION 3.15)
+project(app C ASM)
+
+set(CMAKE_C_STANDARD 11)
+set(MCU_DEVICE "MK66FN2M0xxx18")
+
+# Compiler flags
+set(CMAKE_C_FLAGS "-mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ffunction-sections -fdata-sections")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -O0 -g3")
+
+# Linker flags
+set(CMAKE_EXE_LINKER_FLAGS "-T${CMAKE_SOURCE_DIR}/startup/${MCU_DEVICE}_flash.ld")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--gc-sections")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -specs=nano.specs -specs=nosys.specs")
+
+include_directories(${CMAKE_SOURCE_DIR} board source CMSIS drivers startup)
+
+file(GLOB_RECURSE SOURCES "source/*.c" "board/*.c" "drivers/*.c" "startup/*.c" "startup/*.S")
+
+add_executable(${PROJECT_NAME}.elf ${SOURCES})
+
+add_custom_command(TARGET ${PROJECT_NAME}.elf POST_BUILD
+    COMMAND ${CMAKE_OBJCOPY} -O ihex ${PROJECT_NAME}.elf ${PROJECT_NAME}.hex
+    COMMAND ${CMAKE_OBJCOPY} -O binary ${PROJECT_NAME}.elf ${PROJECT_NAME}.bin
+    COMMAND ${CMAKE_SIZE} ${PROJECT_NAME}.elf
+)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+EOF
+            ;;
+    esac
+    
+    # Create .clangd for better LSP
+    cat > .clangd << 'EOF'
+CompileFlags:
+  Add:
+    - --target=arm-none-eabi
+  Remove:
+    - -mfloat-abi=*
+    - -mfpu=*
+    - -mcpu=*
+EOF
+    
+    echo ""
+    echo "Project created successfully!"
+    echo ""
+    echo "Next steps:"
+    echo "  1. Copy SDK files to board/, startup/, CMSIS/, drivers/"
+    echo "  2. Update CMakeLists.txt with your source files"
+    echo "  3. Run: ebuild"
+    echo "  4. Run: eflash $board"
+}
+
+# Show embedded development help
+ehelp() {
+    cat << 'EOF'
+Embedded Development Commands
+==============================
+
+Project Management:
+  enew [board] [name]    Create new embedded project
+  ebuild                 Build current project (CMake + Ninja)
+  eclean                 Clean build directory
+
+Flashing & Debugging:
+  eflash [board] [elf]   Flash firmware to board
+  edebug [board] [elf]   Start GDB debug session
+  
+Serial Communication:
+  eserial [port] [baud]  Connect to serial port (default: /dev/ttyACM0 @ 115200)
+  eports                 List available serial ports
+
+Supported Boards:
+  kl25z, kl25            FRDM-KL25Z (Cortex-M0+)
+  k66, fmuk66            RDDRONE-FMUK66 (Cortex-M4F)
+
+Examples:
+  enew kl25z my-blinky   # Create new KL25Z project
+  ebuild                 # Build project
+  eflash kl25z           # Flash to KL25Z
+  eserial                # Connect to serial console
+  edebug k66             # Debug K66 board
+
+Tips:
+  - Use 'v' alias to open Neovim
+  - Press <leader>eb in Neovim to build
+  - Press <leader>db to toggle breakpoint
+  - Use picocom: Ctrl+A Ctrl+X to exit
+EOF
+}
+
+# Initialize embedded dev environment
+einit() {
+    echo "Checking embedded development tools..."
+    
+    local missing=()
+    
+    command -v arm-none-eabi-gcc >/dev/null || missing+=("gcc-arm-none-eabi")
+    command -v gdb-multiarch >/dev/null || missing+=("gdb-multiarch")
+    command -v openocd >/dev/null || missing+=("openocd")
+    command -v cmake >/dev/null || missing+=("cmake")
+    command -v ninja >/dev/null || missing+=("ninja-build")
+    command -v picocom >/dev/null || missing+=("picocom")
+    
+    if [[ ${#missing[@]} -gt 0 ]]; then
+        echo "Missing tools: ${missing[*]}"
+        echo ""
+        echo "Install with:"
+        echo "  sudo apt install ${missing[*]}"
+        return 1
+    fi
+    
+    echo "✓ All tools installed"
+    echo ""
+    echo "Run 'ehelp' for available commands"
+}

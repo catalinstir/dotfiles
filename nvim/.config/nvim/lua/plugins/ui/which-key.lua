@@ -30,6 +30,8 @@ return {
         { "<leader>t", group = "Terminal", icon = "  " },
         { "<leader>x", group = "Trouble", icon = "  " },
         { "<leader>e", group = "NvimTree", icon = "  " },
+        { "<leader>E", group = "Embedded", icon = "  " },
+        { "<leader>d", group = "Debug", icon = "  " },
         { "<leader>m", group = "Mason", icon = "  " },
         { "<leader>T", group = "Typr", icon = "  " },
         { "<leader>y", group = "Yank entire file", icon = "  " },

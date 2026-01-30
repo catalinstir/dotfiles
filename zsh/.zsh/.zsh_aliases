@@ -24,28 +24,28 @@ alias t="/usr/bin/tmux"
 
 # Eza
 ## Basic replacements
-alias ls="eza --icons --group-directories-first"
-alias l="eza -la --git --header --icons auto"
+alias els="eza --icons --group-directories-first"
+alias el="eza -la --git --header --icons auto"
 
 ## Tree views
-alias lt="eza -l --git -T --hyperlink --icons --header"
+alias elt="eza -l --git -T --hyperlink --icons --header"
 
 ## Git integration
-alias lg="eza --icons --group-directories-first -lh --git"
-alias lga="eza --icons --group-directories-first -lha --git"
+alias elg="eza --icons --group-directories-first -lh --git"
+alias elga="eza --icons --group-directories-first -lha --git"
 
 ## Sorting options
-alias lS="eza --icons --group-directories-first -lh --sort=size"
-alias lT="eza --icons --group-directories-first -lh --sort=modified"
-alias lX="eza --icons --group-directories-first -lh --sort=extension"
+alias elS="eza --icons --group-directories-first -lh --sort=size"
+alias elT="eza --icons --group-directories-first -lh --sort=modified"
+alias elX="eza --icons --group-directories-first -lh --sort=extension"
 
 ## Special views
-alias lD="eza --icons -lhD"  # Only directories
-alias lf="eza --icons -lhf"  # Only files
-alias lh="eza --icons -lhd .*"  # Only hidden files
+alias elD="eza --icons -lhD"  # Only directories
+alias elf="eza --icons -lhf"  # Only files
+alias elh="eza --icons -lhd .*"  # Only hidden files
 
 ## Detailed info
-alias lli="eza --icons --group-directories-first -lh --git --header --inode --links"
+alias elli="eza --icons --group-directories-first -lh --git --header --inode --links"
 
 compdef l=eza
 
@@ -66,6 +66,9 @@ alias c="cd"
 alias cp="cp -v"
 alias rm="rm -v"
 alias mv="mv -v"
+alias rmdir="rmdir -v"
+alias mkdir="mkdir -v"
+alias ln="ln -v"
 
 # system
 alias reboot="sudo reboot"
