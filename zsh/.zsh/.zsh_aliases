@@ -1,6 +1,6 @@
 # Python
 alias p3="python3"
-alias pd3="pydoc3"
+alias pyman="python3 -m pydoc"
 alias devpy="source ~/.venv/dev/bin/activate"
 
 # Docker/K8s
@@ -67,7 +67,7 @@ alias cp="cp -v"
 alias rm="rm -v"
 alias mv="mv -v"
 alias rmdir="rmdir -v"
-alias mkdir="mkdir -v"
+alias mkdir="mkdir -v -p"
 alias ln="ln -v"
 
 # system
