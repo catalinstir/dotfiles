@@ -12,7 +12,7 @@ mkcd() {
 }
 
 chmac() {
-    MACFILE='~/pub/MAC/mta_mac.txt'
+    MACFILE='/home/catalinux/Public/MAC/mta_mac.txt'
     IFACE="wlp0s20f3"
     NEWMAC=$(cat "$MACFILE")
 
@@ -101,4 +101,47 @@ Any additional ARGS are passed to Neovide itself."
     if [ $DETACH -eq 1 ]; then
         exit
     fi
+}
+
+venv() {
+  local registry="$HOME/.config/venvs"
+
+  if [[ ! -f "$registry" ]]; then
+    echo "No registry found at ~/.config/venvs"
+    return 1
+  fi
+
+  local venvs=()
+  while IFS= read -r line; do
+    [[ -z "$line" || "$line" == \#* ]] && continue
+    [[ -f "$line/bin/activate" ]] && venvs+=("$line")
+  done < "$registry"
+
+  if [[ ${#venvs[@]} -eq 0 ]]; then
+    echo "No valid venvs found (check paths in ~/.config/venvs)"
+    return 1
+  fi
+
+  for i in {1..${#venvs[@]}}; do
+    printf "  [%d] %s\n" "$i" "${venvs[$i]/#$HOME/~}"
+  done
+
+  echo ""
+  read "choice?Select [1-${#venvs[@]}]: "
+
+  if [[ ! "$choice" =~ ^[0-9]+$ ]] || (( choice < 1 || choice > ${#venvs[@]} )); then
+    echo "Invalid selection."
+    return 1
+  fi
+
+  source "${venvs[$choice]}/bin/activate"
+  echo "Activated: ${venvs[$choice]/#$HOME/~}"
+}
+
+find-venvs() {
+  find "$HOME" \
+    -name activate \
+    -path "*/bin/activate" \
+    -not -path "*/.git/*" \
+    2>/dev/null | sed 's|/bin/activate||' | sort
 }

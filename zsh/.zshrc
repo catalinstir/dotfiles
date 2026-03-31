@@ -1,5 +1,5 @@
 # If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:/usr/local/bin:$PATH:/home/catalin/Games/factorio/factorio/bin/x64:/home/catalin/Downloads/ghidra_11.3.1_PUBLIC:/snap/bin
+export PATH=$HOME/bin:/usr/local/bin:/snap/bin:$PATH
 export PATH=$HOME/.local/bin:$PATH
 export PATH="$HOME/.npm-global/bin:$PATH"
 # export PATH="$PATH:/usr/local/mcuxpressoide-25.6.136/ide/tools/bin"
@@ -11,6 +11,7 @@ export JAVA_HOME=/opt/jdk-21
 export WIN="/media/catalin/win"
 export GH="https://github.com"
 
+# Konsole colorscheme: Black on White
 ZSH_THEME="gallois"
 # ZSH_THEME=random
 # ZSH_THEME_RANDOM_CANDIDATES=( "bira" "agnoster" "robbyrussell" "fino-time" "gallois" "imajes" "itchy" "jnrowe" "minimal" "nicoulaj"  )
@@ -75,4 +76,4 @@ source ~/.zsh/.zsh_embedded
 cat ~/.zsh/.reminders
 
 # Start global env
-source ~/.venv/dev/bin/activate
+source ~/.venv/main/bin/activate

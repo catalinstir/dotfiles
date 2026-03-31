@@ -10,7 +10,7 @@ colorscheme zellner
 set nu			" print the line number in front of each line
 set rnu			" show relative line number in front of each line
 set cul			" highlight the screen line of the cursor
-set cc=80		" columns to highlight
+" set cc=80		" columns to highlight
 set ls=2		" tells when last window has status lines 
 set ru			" show cursor line and column in the status line
 set sc			" show (partial) command somewhere

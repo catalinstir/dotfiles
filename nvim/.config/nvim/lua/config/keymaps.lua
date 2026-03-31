@@ -44,6 +44,11 @@ vim.keymap.set("n", "<leader>of", function()
   end
 end, { desc = "Options | Toggle Format on Save", silent = true })
 
+-- Switch between header and source files (LSP)
+vim.keymap.set("n", "gA", function()
+  vim.cmd "ClangdSwitchSourceHeader"
+end, { desc = "Switch Header/Source (LSP)", silent = true })
+
 -- Live Grep in Neovim Config Directory
 vim.keymap.set("n", "<leader>nv", function()
   require("telescope.builtin").live_grep {
@@ -121,7 +126,6 @@ vim.keymap.set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
 
 -- Close buffer without closing window
 vim.keymap.set("n", "<leader>bd", "<cmd>bd<cr>", { desc = "Delete buffer" })
-vim.keymap.set("n", "<leader>bD", "<cmd>bd!<cr>", { desc = "Delete buffer (force)" })
 
 -- Close all buffers except current
 vim.keymap.set("n", "<leader>bo", "<cmd>%bd|e#|bd#<cr>", { desc = "Close all other buffers" })
