@@ -57,6 +57,7 @@ alias elli="eza --icons --group-directories-first -lh --git --header --inode --l
 compdef l=eza
 
 # QOL
+alias sai="sudo apt install"
 alias f="fzf --preview='cat {}'"
 alias sl="ls"
 alias mna="man"
@@ -76,6 +77,10 @@ alias mv="mv -v"
 alias rmdir="rmdir -v"
 alias mkdir="mkdir -v -p"
 alias ln="ln -v"
+alias dwn="cd ~/Downloads"
+alias doc="cd ~/Documents"
+alias atm="cd ~/ATM"
+alias lic="cd ~/Licenta"
 
 # system
 alias reboot="sudo reboot"
@@ -90,3 +95,6 @@ alias cbuild="cargo build"
 alias cinit="cargo init"
 alias ctest="cargo test"
 alias cdoc="cargo doc"
+
+# venv
+alias venv="source ./.venv/bin/activate"
