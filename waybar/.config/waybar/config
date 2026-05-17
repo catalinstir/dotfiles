@@ -1,0 +1,28 @@
+{
+    "layer": "top",
+    "position": "bottom",
+    "height": 20,
+    "modules-left": ["sway/workspaces"],
+    "modules-right": ["pulseaudio", "backlight", "network", "battery", "clock"],
+
+    "clock": {
+        "format": "{:%Y-%m-%d %H:%M}"
+    },
+    "battery": {
+        "format": "BAT {capacity}%",
+        "format-charging": "CHR {capacity}%"
+    },
+    "pulseaudio": {
+        "format": "VOL {volume}% ",
+        "format-muted": "MUTE"
+    },
+    "backlight": {
+        "format": "BRT {percent}% ",
+        "format-icons": ["", ""]
+    },
+    "network": {
+        "format-wifi": "{essid}",
+        "format-ethernet": "{ipaddr}",
+        "format-disconnected": "DOWN"
+    }
+}

@@ -1,5 +1,5 @@
 # If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:/usr/local/bin:/snap/bin:$PATH
+export PATH=$HOME/bin:/usr/local/bin:/usr/sbin:/snap/bin:$PATH
 export PATH=$HOME/.local/bin:$PATH
 export PATH="$HOME/.npm-global/bin:$PATH"
 # export PATH="$PATH:/usr/local/mcuxpressoide-25.6.136/ide/tools/bin"
@@ -75,5 +75,6 @@ source ~/.zsh/.zsh_embedded
 
 cat ~/.zsh/.reminders
 
-# Start global env
-source ~/.venv/main/bin/activate
+export PATH="$PATH:/usr/sbin"
+
+fastfetch
