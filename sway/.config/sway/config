@@ -18,6 +18,15 @@ set $term kitty
 # Your preferred application launcher
 set $menu fuzzel
 
+# Background img 
+output * bg /home/catalinux/Pictures/wallpapers/creation-white.jpeg fill
+
+# Title bar font
+font pango:Iosevka NF Bold Italic 12
+
+# Focused window color
+client.focused #585b70 #585b70 #ffffff #585b70 #585b70
+
 include /etc/sway/config-vars.d/*
 
 ### Output configuration
@@ -219,7 +228,7 @@ bindsym $mod+r mode "resize"
     bindsym XF86MonBrightnessUp exec brightnessctl set +5%
     bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
 
-exec eval $(gnome-keyring-daemon --start)
+exec eval $(gnome-keyring-daemon --start --components=secrets)
 exec export SSH_AUTH_SOCK
 
 #

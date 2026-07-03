@@ -77,4 +77,7 @@ cat ~/.zsh/.reminders
 
 export PATH="$PATH:/usr/sbin"
 
-fastfetch
+/usr/bin/tmux
+/usr/bin/fastfetch
+
+[ -f "/home/catalinux/.ghcup/env" ] && . "/home/catalinux/.ghcup/env" # ghcup-env

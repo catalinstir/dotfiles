@@ -1,5 +1,6 @@
 return {
   "MeanderingProgrammer/render-markdown.nvim",
+  enabled = false,
   ft = { "markdown", "quarto" }, -- lazy-load on markdown-like files
   dependencies = {
     "nvim-treesitter/nvim-treesitter",
