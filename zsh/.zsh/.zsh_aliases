@@ -98,3 +98,6 @@ alias cdoc="cargo doc"
 
 # venv
 alias venv="source ./.venv/bin/activate"
+
+# git
+alias gpom="git push -u origin main"
