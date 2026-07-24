@@ -20,6 +20,7 @@ local options = {
   expandtab = true,
   softtabstop = 4,
   smartindent = true,
+  guicursor = "a:hor20-blinkon500",
 }
 
 for name, value in pairs(options) do

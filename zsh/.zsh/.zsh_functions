@@ -113,3 +113,8 @@ Any additional ARGS are passed to Neovide itself."
         exit
     fi
 }
+
+v() {
+    /usr/local/bin/nvim "$@"
+    printf '\e[3 q'
+}

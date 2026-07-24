@@ -7,11 +7,16 @@ return {
     -- { "<leader>ef", "<cmd>NvimTreeFindFile<cr>", desc = "Find current file in tree" },
     -- { "<leader>ec", "<cmd>NvimTreeCollapse<cr>", desc = "Collapse all folders" },
   },
+  init = function()
+    -- Load nvim-tree when nvim is opened with a directory
+    if vim.fn.argc(-1) == 1 then
+      local stat = vim.uv.fs_stat(vim.fn.argv(0))
+      if stat and stat.type == "directory" then
+        require("lazy").load { plugins = { "nvim-tree.lua" } }
+      end
+    end
+  end,
   config = function()
-    -- Disable netrw
-    vim.g.loaded_netrw = 1
-    vim.g.loaded_netrwPlugin = 1
-
     -- Custom highlights for better visuals
     vim.api.nvim_set_hl(0, "NvimTreeFolderIcon", { fg = "#8AADF4" })
     vim.api.nvim_set_hl(0, "NvimTreeGitDirty", { fg = "#F5A97F" })

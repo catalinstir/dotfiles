@@ -25,17 +25,17 @@ alias helgrind="valgrind --tool=helgrind"
 alias gogh='bash -c "$(wget -qO- https://git.io/vQgMr)"'
 alias dn="dotnet"
 alias vide="neovide"
-alias v="/usr/local/bin/nvim"
+# alias v="/usr/local/bin/nvim"
 alias t="/usr/bin/tmux"
 
 
 # Eza
 ## Basic replacements
 alias els="eza --icons --group-directories-first"
-alias el="eza -la --git --header --icons auto"
+alias l="eza -la --git --header --icons auto"
 
 ## Tree views
-alias elt="eza -l --git -T --hyperlink --icons --header"
+alias lt="eza -l --git -T --hyperlink --icons --header"
 
 ## Git integration
 alias elg="eza --icons --group-directories-first -lh --git"

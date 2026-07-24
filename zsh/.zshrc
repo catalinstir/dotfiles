@@ -77,7 +77,6 @@ cat ~/.zsh/.reminders
 
 export PATH="$PATH:/usr/sbin"
 
-/usr/bin/tmux
-/usr/bin/fastfetch
+[ -z "$TMUX" ] && { tmux attach 2>/dev/null || tmux }
 
 [ -f "/home/catalinux/.ghcup/env" ] && . "/home/catalinux/.ghcup/env" # ghcup-env

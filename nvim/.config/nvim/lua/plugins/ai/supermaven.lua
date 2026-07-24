@@ -15,4 +15,11 @@ return {
       accept_word = "<A-w>",
     },
   },
+  config = function(_, opts)
+    require("supermaven-nvim").setup(opts)
+    -- Stop it immediately after setup
+    vim.schedule(function()
+      require("supermaven-nvim.api").stop()
+    end)
+  end,
 }
