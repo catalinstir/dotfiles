@@ -16,6 +16,11 @@ return {
       "css",
       "json",
       "markdown",
+      "bash",
+      "vim",
+      "vimdoc",
+      "query",
+      "regex",
     }
 
     -- 2. Enable Treesitter highlighting (Neovim handles it now)
@@ -24,7 +29,5 @@ return {
         pcall(vim.treesitter.start, args.buf)
       end,
     })
-    -- 4. (Optional) better indentation (fallback to builtin)
-    vim.bo.indentexpr = ""
   end,
 }

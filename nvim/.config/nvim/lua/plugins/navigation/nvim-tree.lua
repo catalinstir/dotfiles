@@ -38,9 +38,9 @@ return {
         width = 35,
         side = "left",
         preserve_window_proportions = false,
-        number = false,
-        relativenumber = false,
-        signcolumn = "yes",
+        number = true,
+        relativenumber = true,
+        signcolumn = "no",
         float = {
           enable = false,
           quit_on_focus_loss = true,

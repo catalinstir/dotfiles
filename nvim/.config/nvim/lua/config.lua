@@ -13,4 +13,4 @@ require("catppuccin").setup {
     },
   },
 }
-vim.cmd.colorscheme "catppuccin-latte"
+pcall(require, "current-theme")

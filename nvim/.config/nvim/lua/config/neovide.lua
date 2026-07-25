@@ -1,7 +1,4 @@
 if vim.g.neovide then
-  -- Font
-  vim.o.guifont = "Iosevka NF:h10"
-
   -- Fullscreen
   vim.g.neovide_fullscreen = true
 

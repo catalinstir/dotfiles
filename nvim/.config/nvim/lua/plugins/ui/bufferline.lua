@@ -41,7 +41,7 @@ return {
           filetype = "NvimTree",
           text = "File Explorer",
           highlight = "Directory",
-          separator = true,
+          separator = false,
         },
       },
       show_buffer_icons = true,

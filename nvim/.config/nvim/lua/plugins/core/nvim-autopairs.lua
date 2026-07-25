@@ -27,7 +27,6 @@ return {
       enable_bracket_in_quote = true,
       enable_abbr = false,
       break_undo = true,
-      check_ts = true,
       map_cr = true,
       map_bs = true,
       map_c_h = false,
