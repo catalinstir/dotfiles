@@ -54,7 +54,7 @@ plugins=(
     zsh-autosuggestions
 	zsh-syntax-highlighting
 	zsh-history-substring-search
-	zsh-z
+	z
 	emotty
 	emoji
 	fzf
