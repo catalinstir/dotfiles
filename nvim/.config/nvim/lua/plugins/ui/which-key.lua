@@ -9,7 +9,7 @@ return {
     },
     preset = "classic",
     win = {
-      border = vim.g.border_enabled and "rounded" or "none",
+      border = "none",
       no_overlap = false,
     },
     delay = function()
@@ -27,14 +27,11 @@ return {
         { "<leader>n", group = "Neovim", icon = "  " },
         { "<leader>o", group = "Options", icon = "  " },
         { "<leader>p", group = "Plugins", icon = "  " },
-        { "<leader>t", group = "Terminal", icon = "  " },
         { "<leader>x", group = "Trouble", icon = "  " },
-        { "<leader>e", group = "NvimTree", icon = "  " },
-        { "<leader>E", group = "Embedded", icon = "  " },
-        { "<leader>d", group = "Debug", icon = "  " },
-        { "<leader>m", group = "Mason", icon = "  " },
-        { "<leader>T", group = "Typr", icon = "  " },
-        { "<leader>y", group = "Yank entire file", icon = "  " },
+        { "<leader>e", icon = "  " },
+        { "<leader>m", icon = "  " },
+        { "<leader>T", icon = "  " },
+        { "<leader>y", icon = "  " },
         { "<leader>b", group = "Buffers", icon = "  " },
       },
     }

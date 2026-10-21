@@ -1,10 +1,6 @@
 -- Basic Remaps --
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
--- tmux navigation
-vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Move to left window" })
-vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Move to lower window" })
-vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Move to upper window" })
-vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
+-- <C-h/j/k/l> window/pane navigation lives in plugins/navigation/tmux-navigator.lua
 
 -- Yank entire file content
 vim.keymap.set("n", "<leader>y", "ggyG``", { desc = "Yank entire file", silent = true })
@@ -34,7 +30,6 @@ vim.keymap.set("n", "<leader>pu", "<cmd>Lazy update<cr>", { desc = "Lazy | Updat
 -- Options --
 -- Toggle Format on Save
 vim.keymap.set("n", "<leader>of", function()
-  local conform = require "conform"
   if vim.g.disable_autoformat then
     vim.g.disable_autoformat = false
     vim.notify("Enabled", vim.log.levels.INFO, { title = "Format on Save" })
@@ -44,18 +39,13 @@ vim.keymap.set("n", "<leader>of", function()
   end
 end, { desc = "Options | Toggle Format on Save", silent = true })
 
--- Switch between header and source files (LSP)
-vim.keymap.set("n", "gA", function()
-  vim.cmd "ClangdSwitchSourceHeader"
-end, { desc = "Switch Header/Source (LSP)", silent = true })
-
 -- Live Grep in Neovim Config Directory
 vim.keymap.set("n", "<leader>nv", function()
   require("telescope.builtin").live_grep {
     cwd = vim.fn.stdpath "config",
     prompt_title = "Search Neovim Config",
   }
-end, { desc = "Options | Grep Neovim Config", silent = true })
+end, { desc = "Neovim | Grep Config", silent = true })
 
 -- Toggle Line Numbers
 vim.keymap.set("n", "<leader>on", function()
@@ -95,22 +85,10 @@ vim.keymap.set("n", "<leader>lh", function()
   else
     vim.notify("Disabled", vim.log.levels.INFO, { title = "Inlay Hints" })
   end
-end, { desc = "Options | Toggle Inlay Hints", silent = true })
+end, { desc = "LSP | Toggle Inlay Hints", silent = true })
 
 -- SudaWrite
 vim.keymap.set("n", "<leader>ns", "<cmd>SudaWrite<cr>", { desc = "Neovim | Write with sudo", silent = true })
-
--- Toggle Supermaven
-vim.keymap.set("n", "<leader>na", function()
-  local api = require "supermaven-nvim.api"
-  if api.is_running() then
-    api.stop()
-    vim.notify("Disabled", vim.log.levels.INFO, { title = "Supermaven" })
-  else
-    api.start()
-    vim.notify("Enabled", vim.log.levels.INFO, { title = "Supermaven" })
-  end
-end, { desc = "Options | Toggle Supermaven", silent = true })
 
 -- Open Neovim Config in Telescope
 vim.keymap.set("n", "<leader>nV", function()
@@ -118,7 +96,7 @@ vim.keymap.set("n", "<leader>nV", function()
     cwd = vim.fn.stdpath "config",
     prompt_title = "Neovim Config Files",
   }
-end, { desc = "Options | Find Config Files", silent = true })
+end, { desc = "Neovim | Find Config Files", silent = true })
 
 -- Quick buffer navigation
 vim.keymap.set("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Previous buffer" })
@@ -141,9 +119,6 @@ vim.keymap.set("n", "<A-k>", "<cmd>m .-2<cr>==", { desc = "Move line up" })
 -- Move lines in visual mode
 vim.keymap.set("v", "<A-j>", ":m '>+1<cr>gv=gv", { desc = "Move selection down" })
 vim.keymap.set("v", "<A-k>", ":m '<-2<cr>gv=gv", { desc = "Move selection up" })
-
--- Don't yank when pasting over selection
-vim.keymap.set("v", "p", '"_dP', { desc = "Paste without yanking" })
 
 -- Save with Ctrl+S (also works in insert mode)
 vim.keymap.set("n", "<C-s>", "<cmd>w<cr>", { desc = "Save file" })

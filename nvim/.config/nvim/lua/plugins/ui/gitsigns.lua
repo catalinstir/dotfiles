@@ -28,7 +28,7 @@ return {
       end, "Prev Hunk")
 
       -- Actions
-      map("n", "<leader>gsh", gs.stage_hunk, "Stage Hunk")
+      map("n", "<leader>gh", gs.stage_hunk, "Stage Hunk")
       map("n", "<leader>gr", gs.reset_hunk, "Reset Hunk")
       map("n", "<leader>gS", gs.stage_buffer, "Stage Buffer")
       map("n", "<leader>gu", gs.undo_stage_hunk, "Undo Stage Hunk")

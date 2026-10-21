@@ -4,6 +4,6 @@ return {
   opts = {},
   cmd = { "Typr", "TyprStats" },
   keys = {
-    { "<leader>T", "<cmd>Typr<cr>", desc = "Options | Open Typr" },
+    { "<leader>T", "<cmd>Typr<cr>", desc = "Typr | Open" },
   },
 }

@@ -6,7 +6,7 @@ return {
     {
       "<leader>lf",
       function()
-        require("conform").format { async = true, lsp_fallback = true }
+        require("conform").format { async = true, lsp_format = "fallback" }
       end,
       mode = "",
       desc = "Format buffer",
@@ -27,14 +27,14 @@ return {
       css = { "prettier" },
       markdown = { "prettier" },
     },
-    format_on_save = function(bufnr)
+    format_on_save = function()
       -- Disable with a global variable
       if vim.g.disable_autoformat then
         return
       end
       return {
         timeout_ms = 500,
-        lsp_fallback = true,
+        lsp_format = "fallback",
       }
     end,
   },

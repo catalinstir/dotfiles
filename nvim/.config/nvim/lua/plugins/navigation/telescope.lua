@@ -29,7 +29,22 @@ return {
 
     -- Config
     { "<leader>fk", "<cmd>Telescope keymaps<cr>", desc = "Keymaps" },
-    { "<leader>ft", "<cmd>Telescope themes<cr>", desc = "Themes" },
+    {
+      "<leader>ft",
+      function()
+        -- Colorschemes are lazy-loaded, so load every plugin that ships colors/ before listing them
+        local schemes = vim.tbl_filter(function(p)
+          return vim.uv.fs_stat(p.dir .. "/colors") ~= nil
+        end, require("lazy").plugins())
+        require("lazy").load {
+          plugins = vim.tbl_map(function(p)
+            return p.name
+          end, schemes),
+        }
+        vim.cmd "Telescope themes"
+      end,
+      desc = "Themes",
+    },
     { "<leader>fc", "<cmd>Telescope commands<cr>", desc = "Commands" },
 
     -- LSP
@@ -49,22 +64,10 @@ return {
 
     telescope.setup {
       defaults = {
-        vimgrep_arguments = {
-          "rg",
-          "--color=never",
-          "--no-heading",
-          "--with-filename",
-          "--line-number",
-          "--column",
-          "--smart-case",
-        },
         prompt_prefix = "  :",
         selection_caret = " ",
         entry_prefix = " ",
-        initial_mode = "insert",
-        selection_strategy = "reset",
         sorting_strategy = "ascending",
-        layout_strategy = "horizontal",
         layout_config = {
           horizontal = {
             prompt_position = "top",
@@ -91,58 +94,20 @@ return {
         },
         generic_sorter = require("telescope.sorters").get_generic_fuzzy_sorter,
         path_display = { "truncate" },
-        winblend = 0,
         border = {},
-        borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
-        color_devicons = true,
         set_env = { ["COLORTERM"] = "truecolor" },
+        -- Only overrides of Telescope's defaults (<C-x>/<C-v>/<C-q>, j/k, gg/G etc. are built in)
         mappings = {
           i = {
-            ["<C-n>"] = actions.move_selection_next,
-            ["<C-p>"] = actions.move_selection_previous,
             ["<Tab>"] = actions.move_selection_next,
             ["<S-Tab>"] = actions.move_selection_previous,
-
-            ["<C-c>"] = actions.close,
             ["<Esc>"] = actions.close,
-
-            ["<CR>"] = actions.select_default,
-            ["<C-x>"] = actions.select_horizontal,
-            ["<C-v>"] = actions.select_vertical,
-            ["<C-t>"] = actions.select_tab,
-
-            ["<C-u>"] = actions.preview_scrolling_up,
-            ["<C-d>"] = actions.preview_scrolling_down,
-
             ["<C-h>"] = action_layout.toggle_preview,
-
-            ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
-            ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
           },
           n = {
             ["q"] = actions.close,
             ["<Esc>"] = actions.close,
-
-            ["<CR>"] = actions.select_default,
-            ["<C-x>"] = actions.select_horizontal,
-            ["<C-v>"] = actions.select_vertical,
-            ["<C-t>"] = actions.select_tab,
-
-            ["j"] = actions.move_selection_next,
-            ["k"] = actions.move_selection_previous,
-            ["<Down>"] = actions.move_selection_next,
-            ["<Up>"] = actions.move_selection_previous,
-
-            ["gg"] = actions.move_to_top,
-            ["G"] = actions.move_to_bottom,
-
-            ["<C-u>"] = actions.preview_scrolling_up,
-            ["<C-d>"] = actions.preview_scrolling_down,
-
             ["<C-h>"] = action_layout.toggle_preview,
-
-            ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
-            ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
           },
         },
       },
